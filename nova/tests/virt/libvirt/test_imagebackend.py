@@ -20,6 +20,8 @@ import os
 import fixtures
 from oslo.config import cfg
 
+from inspect import getargspec
+
 from nova import exception
 from nova.openstack.common import uuidutils
 from nova import test
@@ -742,6 +744,10 @@ class RbdTestCase(_ImageTestCase, test.NoDBTestCase):
         self.mox.ReplayAll()
 
         self.assertFalse(image._is_cloneable(location))
+
+    def test_parent_compatible(self):
+        self.assertEqual(getargspec(imagebackend.Image.libvirt_info),
+             getargspec(self.image_class.libvirt_info))
 
 
 class BackendTestCase(test.NoDBTestCase):
